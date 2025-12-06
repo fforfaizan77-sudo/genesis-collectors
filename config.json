@@ -1,5 +1,6 @@
 {
-  "google_sheet_id": "https://docs.google.com/spreadsheets/d/1Nd_xyEWtqrIH9_0iyo-GvFAGjD_uKztXtjJs_eJt8uA",
+  "google_sheet_id": "1Nd_xyEWtqrIH9_0iyo-GvFAGjD_uKztXtjJs_eJt8uA
+",
   "google_api_credentials_file": "credentials.json",
   "scan_interval_hours": 1,
   "sources": {
