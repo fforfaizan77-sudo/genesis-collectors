@@ -17,7 +17,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_name(
     config["google_api_credentials_file"], scope
 )
 client = gspread.authorize(creds)
-sheet = client.open_by_key(config["https://docs.google.com/spreadsheets/d/1Nd_xyEWtqrIH9_0iyo-GvFAGjD_uKztXtjJs_eJt8uA/edit?gid=0#gid=0"]).sheet1
+sheet = client.open_by_key(config["google_sheet_id"]).sheet1
 
 # --- PLACEHOLDER COLLECTOR FUNCTIONS ---
 # These will later be replaced with REAL API calls.
