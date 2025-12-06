@@ -4,42 +4,91 @@ from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 import random
 
-# --- CONFIG ---
+# --- LOAD CONFIG ---
 with open("config.json") as f:
     config = json.load(f)
 
 # --- GOOGLE SHEETS SETUP ---
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name(config["google_api_credentials_file"], scope)
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
+creds = ServiceAccountCredentials.from_json_keyfile_name(
+    config["google_api_credentials_file"], scope
+)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(config["google_sheet_id"]).sheet1
 
-# --- PLACEHOLDER COLLECTORS ---
+# --- PLACEHOLDER COLLECTOR FUNCTIONS ---
+# These will later be replaced with REAL API calls.
+# For now, they generate realistic test data.
+
 def collect_reddit():
-    return [{"source": "reddit", "topic": "AI Trend " + str(i), "popularity": random.uniform(0, 1), "timestamp": str(datetime.now())} for i in range(3)]
+    return [{
+        "source": "reddit",
+        "topic": f"Reddit Trend {i}",
+        "popularity": random.uniform(0, 1),
+        "timestamp": str(datetime.now())
+    } for i in range(5)]
 
 def collect_youtube():
-    return [{"source": "youtube", "topic": "Short Video Trend " + str(i), "popularity": random.uniform(0,1), "timestamp": str(datetime.now())} for i in range(3)]
+    return [{
+        "source": "youtube",
+        "topic": f"Youtube Viral {i}",
+        "popularity": random.uniform(0, 1),
+        "timestamp": str(datetime.now())
+    } for i in range(5)]
 
 def collect_tiktok():
-    return [{"source": "tiktok", "topic": "Viral Hashtag " + str(i), "popularity": random.uniform(0,1), "timestamp": str(datetime.now())} for i in range(3)]
+    return [{
+        "source": "tiktok",
+        "topic": f"Tiktok Trend {i}",
+        "popularity": random.uniform(0, 1),
+        "timestamp": str(datetime.now())
+    } for i in range(5)]
 
 def collect_amazon():
-    return [{"source": "amazon", "topic": "Trending Product " + str(i), "popularity": random.uniform(0,1), "timestamp": str(datetime.now())} for i in range(3)]
+    return [{
+        "source": "amazon",
+        "topic": f"Amazon Trending Product {i}",
+        "popularity": random.uniform(0, 1),
+        "timestamp": str(datetime.now())
+    } for i in range(5)]
 
 def collect_etsy():
-    return [{"source": "etsy", "topic": "Trending Item " + str(i), "popularity": random.uniform(0,1), "timestamp": str(datetime.now())} for i in range(3)]
+    return [{
+        "source": "etsy",
+        "topic": f"Etsy Trending {i}",
+        "popularity": random.uniform(0, 1),
+        "timestamp": str(datetime.now())
+    } for i in range(5)]
 
 def collect_google_trends():
-    return [{"source": "google_trends", "topic": "Search Spike " + str(i), "popularity": random.uniform(0,1), "timestamp": str(datetime.now())} for i in range(3)]
+    return [{
+        "source": "google_trends",
+        "topic": f"Search Spike {i}",
+        "popularity": random.uniform(0, 1),
+        "timestamp": str(datetime.now())
+    } for i in range(5)]
 
 def collect_github():
-    return [{"source": "github", "topic": "New Repo " + str(i), "popularity": random.uniform(0,1), "timestamp": str(datetime.now())} for i in range(3)]
+    return [{
+        "source": "github",
+        "topic": f"New AI Repo {i}",
+        "popularity": random.uniform(0, 1),
+        "timestamp": str(datetime.now())
+    } for i in range(5)]
 
 def collect_job_boards():
-    return [{"source": "job_board", "topic": "Emerging Demand " + str(i), "popularity": random.uniform(0,1), "timestamp": str(datetime.now())} for i in range(3)]
+    return [{
+        "source": "job_board",
+        "topic": f"Emerging Job Demand {i}",
+        "popularity": random.uniform(0, 1),
+        "timestamp": str(datetime.now())
+    } for i in range(5)]
 
-# --- MAIN COLLECTION ---
+
+# --- MAIN COLLECTION LOGIC ---
 all_data = []
 
 if config["sources"]["reddit"]:
@@ -59,11 +108,18 @@ if config["sources"]["github"]:
 if config["sources"]["job_boards"]:
     all_data += collect_job_boards()
 
-# --- FILTER BY PRIORITY ---
-high_priority = [d for d in all_data if d["popularity"] >= config["priority_threshold"]]
+# --- PRIORITY FILTER ---
+priority = config["priority_threshold"]
+high_priority = [item for item in all_data if item["popularity"] >= priority]
 
-# --- WRITE TO SHEET ---
+# --- WRITE HIGH-PRIORITY RESULTS TO GOOGLE SHEET ---
 for item in high_priority:
-    sheet.append_row([item["timestamp"], item["source"], item["topic"], item["popularity"]])
+    sheet.append_row([
+        item["timestamp"],
+        item["source"],
+        item["topic"],
+        item["popularity"]
+    ])
 
-print(f"Genesis scanned {len(all_data)} items. {len(high_priority)} high-priority items saved.")
+print(f"Genesis scanned {len(all_data)} items. {len(high_priority)} items saved.")
+
