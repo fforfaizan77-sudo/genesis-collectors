@@ -21,7 +21,11 @@ jobs:
       - name: Install dependencies
         run: |
           pip install gspread oauth2client
+          
+      - name: Setup credentials from secret
+        run: |
+          echo "${{ secrets.GENESIS_CREDENTIALS }}" > /tmp/credentials.json
 
       - name: Run Genesis collectors
         run: |
-          python collectors.py
+          python collectors.py --credentials /tmp/credentials.json
