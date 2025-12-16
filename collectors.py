@@ -1,23 +1,14 @@
-import json
+import argparse
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from datetime import datetime
-import random
 
-# --- LOAD CONFIG ---
-with open("config.json") as f:
-    config = json.load(f)
+parser = argparse.ArgumentParser()
+parser.add_argument("--credentials", required=True)
+args = parser.parse_args()
 
-# --- GOOGLE SHEETS SETUP ---
-scope = [
-    "https://spreadsheets.google.com/feeds",
-    "https://www.googleapis.com/auth/drive"
-]
-creds = ServiceAccountCredentials.from_json_keyfile_name(
-    config["google_api_credentials_file"], scope
-)
+scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name(args.credentials, scope)
 client = gspread.authorize(creds)
-sheet = client.open_by_key(config["google_sheet_id"]).sheet1
 
 # --- PLACEHOLDER COLLECTOR FUNCTIONS ---
 # These will later be replaced with REAL API calls.
