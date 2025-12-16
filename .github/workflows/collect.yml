@@ -24,7 +24,7 @@ jobs:
           
       - name: Setup credentials from secret
         run: |
-          echo "${{ secrets.GENESIS_CREDENTIALS }}" > /tmp/credentials.json
+          echo "${{ secrets.GENESIS_CREDENTIALS }}" | tr -d '\r' > /tmp/credentials.json
 
       - name: Run Genesis collectors
         run: |
